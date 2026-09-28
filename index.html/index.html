@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mao Mengheang | Graphic Design, Motion & Video Editing Portfolio</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#fdf4ff',
+                            100: '#fae8ff',
+                            500: '#a855f7',
+                            600: '#9333ea',
+                            700: '#7e22ce',
+                            900: '#581c87',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Device Simulator Frames */
+        .preview-container {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            margin: 0 auto;
+        }
+
+        .device-desktop {
+            width: 100%;
+            max-width: 100%;
+            border-radius: 0px;
+            border: none;
+            box-shadow: none;
+        }
+
+        .device-tablet {
+            width: 768px;
+            max-width: 100%;
+            border-radius: 24px;
+            border: 12px solid #334155;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .device-mobile {
+            width: 375px;
+            max-width: 100%;
+            border-radius: 36px;
+            border: 12px solid #334155;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.1);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(100,116,139,0.5);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(100,116,139,0.8);
+        }
+
+        .glass-nav {
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col selection:bg-brand-500 selection:text-white">
+
+    <!-- Top Floating Toolbar for Device Simulation & Theme Control -->
+    <header class="sticky top-0 z-50 bg-slate-950/90 border-b border-slate-800 backdrop-blur-md py-2 px-4 flex flex-wrap items-center justify-between gap-3 text-sm">
+        <div class="flex items-center gap-2 font-semibold text-brand-500">
+            <i class="fa-solid fa-laptop-code text-lg"></i>
+            <span class="hidden sm:inline">Responsive Device Simulator</span>
+        </div>
+
+        <!-- Device View Switcher -->
+        <div class="flex items-center bg-slate-800/80 p-1 rounded-xl border border-slate-700/60">
+            <button id="btn-desktop" onclick="setDeviceView('desktop')" class="px-3 py-1.5 rounded-lg flex items-center gap-2 transition-all bg-brand-600 text-white font-medium shadow-sm" title="Desktop View">
+                <i class="fa-solid fa-desktop"></i>
+                <span class="hidden md:inline">Desktop</span>
+            </button>
+            <button id="btn-tablet" onclick="setDeviceView('tablet')" class="px-3 py-1.5 rounded-lg flex items-center gap-2 transition-all text-slate-400 hover:text-white font-medium" title="Tablet View (768px)">
+                <i class="fa-solid fa-tablet-screen-button"></i>
+                <span class="hidden md:inline">Tablet</span>
+            </button>
+            <button id="btn-mobile" onclick="setDeviceView('mobile')" class="px-3 py-1.5 rounded-lg flex items-center gap-2 transition-all text-slate-400 hover:text-white font-medium" title="Mobile View (375px)">
+                <i class="fa-solid fa-mobile-screen-button"></i>
+                <span class="hidden md:inline">Mobile</span>
+            </button>
+        </div>
+
+        <!-- Actions: Theme Toggle -->
+        <div class="flex items-center gap-2">
+            <button onclick="toggleTheme()" class="p-2 rounded-xl bg-slate-800 text-slate-300 hover:text-white border border-slate-700/60 transition-colors" title="Toggle Light/Dark Theme">
+                <i id="theme-icon" class="fa-solid fa-sun text-yellow-400"></i>
+            </button>
+            <span class="text-xs text-slate-400 border-l border-slate-700 pl-3 hidden lg:inline">
+                Viewport: <span id="viewport-size-display" class="font-mono text-brand-400">Full Width</span>
+            </span>
+        </div>
+    </header>
+
+    <!-- Main Outer Wrapper for Frame Simulation -->
+    <div class="flex-grow flex justify-center items-start w-full bg-slate-950 p-0 sm:p-2 overflow-x-hidden">
+        
+        <!-- Main Portfolio Website Wrapper Frame -->
+        <div id="website-frame" class="preview-container device-desktop bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-screen overflow-hidden flex flex-col relative transition-all">
+            
+            <!-- Navigation Header -->
+            <nav class="sticky top-0 z-40 glass-nav bg-white/80 dark:bg-slate-900/80 border-b border-slate-200 dark:border-slate-800 px-6 py-4 transition-colors">
+                <div class="max-w-6xl mx-auto flex items-center justify-between">
+                    <a href="#" class="text-xl font-bold tracking-tight text-slate-900 dark:text-white flex items-center gap-2">
+                        <span class="w-8 h-8 rounded-lg bg-brand-600 text-white flex items-center justify-center text-sm font-black shadow-md">MM</span>
+                        <span>Mao Mengheang</span>
+                    </a>
+
+                    <!-- Desktop Navigation Links -->
+                    <div class="hidden md:flex items-center gap-8 font-medium text-sm text-slate-600 dark:text-slate-300">
+                        <a href="#about" class="hover:text-brand-500 dark:hover:text-brand-400 transition-colors">About</a>
+                        <a href="#skills" class="hover:text-brand-500 dark:hover:text-brand-400 transition-colors">Skills</a>
+                        <a href="#services" class="hover:text-brand-500 dark:hover:text-brand-400 transition-colors">Services</a>
+                        <a href="#projects" class="hover:text-brand-500 dark:hover:text-brand-400 transition-colors">Projects</a>
+                        <a href="#contact" class="hover:text-brand-500 dark:hover:text-brand-400 transition-colors">Contact</a>
+                    </div>
+
+                    <!-- Mobile Menu Button -->
+                    <button onclick="toggleMobileNav()" class="md:hidden text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white p-2">
+                        <i id="mobile-menu-icon" class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                </div>
+
+                <!-- Mobile Navigation Drawer -->
+                <div id="mobile-menu" class="hidden md:hidden pt-4 pb-2 border-t border-slate-200 dark:border-slate-800 mt-3 space-y-3">
+                    <a href="#about" onclick="toggleMobileNav()" class="block text-slate-600 dark:text-slate-300 hover:text-brand-500 font-medium">About</a>
+                    <a href="#skills" onclick="toggleMobileNav()" class="block text-slate-600 dark:text-slate-300 hover:text-brand-500 font-medium">Skills</a>
+                    <a href="#services" onclick="toggleMobileNav()" class="block text-slate-600 dark:text-slate-300 hover:text-brand-500 font-medium">Services</a>
+                    <a href="#projects" onclick="toggleMobileNav()" class="block text-slate-600 dark:text-slate-300 hover:text-brand-500 font-medium">Projects</a>
+                    <a href="#contact" onclick="toggleMobileNav()" class="block text-slate-600 dark:text-slate-300 hover:text-brand-500 font-medium">Contact</a>
+                </div>
+            </nav>
+
+            <!-- Hero Section -->
+            <section class="relative py-20 px-6 overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-br from-brand-500/10 via-transparent to-pink-500/5 pointer-events-none"></div>
+                <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-12 items-center">
+                    
+                    <div class="md:col-span-7 space-y-6 text-center md:text-left">
+                        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-500/10 text-brand-600 dark:text-brand-400 border border-brand-500/20 text-xs font-semibold">
+                            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                            3 Years Experience • Graphic, Motion & Video Editing
+                        </div>
+                        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-tight">
+                            Hi, I'm Mao Mengheang <br class="hidden sm:inline" />
+                            <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-500 via-purple-500 to-pink-500">Visual Creator</span>
+                        </h1>
+                        <p class="text-lg text-slate-600 dark:text-slate-400 max-w-xl mx-auto md:mx-0 leading-relaxed">
+                            Specializing in Graphic Design, Motion Graphics, and Video Editing across Real Estate, Public Holiday, Automotive, and Event media.
+                        </p>
+
+                        <!-- Action Button -->
+                        <div class="flex flex-wrap items-center justify-center md:justify-start gap-4 pt-2">
+                            <a href="#projects" class="px-6 py-3 rounded-xl font-semibold bg-brand-600 hover:bg-brand-700 text-white shadow-lg shadow-brand-500/25 transition-all flex items-center gap-2">
+                                View My Portfolio
+                                <i class="fa-solid fa-arrow-right text-xs"></i>
+                            </a>
+                        </div>
+
+                        <!-- Social Links: TikTok & Behance -->
+                        <div class="flex items-center justify-center md:justify-start gap-4 pt-4 text-slate-500 dark:text-slate-400">
+                            <a href="https://www.tiktok.com" target="_blank" class="p-3 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-900 hover:text-white dark:hover:bg-black dark:hover:text-white transition-all flex items-center gap-2 text-sm font-semibold" title="TikTok">
+                                <i class="fa-brands fa-tiktok text-xl"></i>
+                                <span>TikTok</span>
+                            </a>
+                            <a href="https://www.behance.net" target="_blank" class="p-3 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-blue-600 hover:text-white dark:hover:bg-blue-600 dark:hover:text-white transition-all flex items-center gap-2 text-sm font-semibold" title="Behance">
+                                <i class="fa-brands fa-behance text-xl"></i>
+                                <span>Behance</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Profile Avatar Card with User Photo -->
+                    <div class="md:col-span-5 flex justify-center">
+                        <div class="relative group">
+                            <div class="absolute -inset-1 bg-gradient-to-r from-brand-500 to-pink-500 rounded-3xl blur opacity-30 group-hover:opacity-60 transition duration-500"></div>
+                            <div class="relative w-64 h-80 sm:w-80 sm:h-96 rounded-3xl bg-slate-800 border border-slate-700/80 overflow-hidden flex flex-col justify-end p-6 shadow-2xl">
+                                <img src="Photo1_2.jpg" alt="Mao Mengheang" class="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105" onerror="this.src='Photo1.jpg'" />
+                                <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent"></div>
+                                <div class="relative z-10">
+                                    <p class="text-xs font-semibold text-brand-400 uppercase tracking-widest">Digital Creator</p>
+                                    <p class="text-xl font-bold text-white">Mao Mengheang</p>
+                                    <p class="text-xs text-slate-300">Graphic • Motion • Video Editor</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- About Me Section -->
+            <section id="about" class="py-16 px-6 bg-slate-50 dark:bg-slate-900/50 border-y border-slate-200 dark:border-slate-800 transition-colors">
+                <div class="max-w-4xl mx-auto space-y-8">
+                    <div class="text-center">
+                        <h2 class="text-3xl font-bold text-slate-900 dark:text-white">About Me</h2>
+                        <div class="w-12 h-1 bg-brand-500 mx-auto rounded-full my-3"></div>
+                    </div>
+
+                    <div class="p-8 rounded-3xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700/60 shadow-lg relative overflow-hidden flex flex-col md:flex-row items-center gap-6">
+                        <div class="w-32 h-32 rounded-2xl overflow-hidden shrink-0 border-2 border-brand-500 shadow-md">
+                            <img src="Photo1_2.jpg" alt="Mao Mengheang" class="w-full h-full object-cover" onerror="this.src='Photo1.jpg'">
+                        </div>
+                        <div class="space-y-4">
+                            <p class="text-base sm:text-lg text-slate-700 dark:text-slate-300 leading-relaxed">
+                                "I'm Mao Mengheang, a skilled Graphic Designer, Motion Graphics artist, and Video Editor with 3 years of experience creating impactful visual content. I specialize in designing engaging graphics and animation that communicate messages effectively. I'm now looking for opportunities to apply my creativity and technical skill to dynamic projects and further grow in the design field."
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Skills & Proficiency Percentages Section -->
+            <section id="skills" class="py-16 px-6">
+                <div class="max-w-6xl mx-auto space-y-10">
+                    <div class="text-center max-w-2xl mx-auto">
+                        <h2 class="text-3xl font-bold text-slate-900 dark:text-white">Software Skills & Proficiency</h2>
+                        <div class="w-12 h-1 bg-brand-500 mx-auto rounded-full my-3"></div>
+                        <p class="text-slate-600 dark:text-slate-400">My technical proficiency levels across creative design software and AI workflows.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        
+                        <!-- Photoshop 90% -->
+                        <div class="p-6 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700/60 shadow-sm space-y-3">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-500 flex items-center justify-center font-bold text-lg">Ps</div>
+                                    <div>
+                                        <h3 class="font-bold text-slate-900 dark:text-white text-sm">Photoshop</h3>
+                                        <p class="text-[11px] text-slate-500">Graphic & Retouching</p>
+                                    </div>
+                                </div>
+                                <span class="text-lg font-extrabold text-blue-500">90%</span>
+                            </div>
+                            <div class="w-full bg-slate-100 dark:bg-slate-700 h-2.5 rounded-full overflow-hidden">
+                                <div class="bg-blue-500 h-full rounded-full transition-all duration-1000" style="width: 90%;"></div>
+                            </div>
+                        </div>
+
+                        <!-- Illustrator 80% -->
+                        <div class="p-6 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700/60 shadow-sm space-y-3">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center font-bold text-lg">Ai</div>
+                                    <div>
+                                        <h3 class="font-bold text-slate-900 dark:text-white text-sm">Illustrator</h3>
+                                        <p class="text-[11px] text-slate-500">Vector & Branding</p>
+                                    </div>
+                                </div>
+                                <span class="text-lg font-extrabold text-amber-500">80%</span>
+                            </div>
+                            <div class="w-full bg-slate-100 dark:bg-slate-700 h-2.5 rounded-full overflow-hidden">
+                                <div class="bg-amber-500 h-full rounded-full transition-all duration-1000" style="width: 80%;"></div>
+                            </div>
+                        </div>
+
+                        <!-- After Effects 70% -->
+                        <div class="p-6 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700/60 shadow-sm space-y-3">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-xl bg-purple-500/10 text-purple-500 flex items-center justify-center font-bold text-lg">AE</div>
+                                    <div>
+                                        <h3 class="font-bold text-slate-900 dark:text-white text-sm">After Effects</h3>
+                                        <p class="text-[11px] text-slate-500">Motion Graphics</p>
+                                    </div>
+                                </div>
+                                <span class="text-lg font-extrabold text-purple-500">70%</span>
+                            </div>
+                            <div class="w-full bg-slate-100 dark:bg-slate-700 h-2.5 rounded-full overflow-hidden">
+                                <div class="bg-purple-500 h-full rounded-full transition-all duration-1000" style="width: 70%;"></div>
+                            </div>
+                        </div>
+
+                        <!-- Premiere Pro 70% -->
+                        <div class="p-6 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700/60 shadow-sm space-y-3">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-xl bg-indigo-500/10 text-indigo-500 flex items-center justify-center font-bold text-lg">Pr</div>
+                                    <div>
+                                        <h3 class="font-bold text-slate-900 dark:text-white text-sm">Premiere Pro</h3>
+                                        <p class="text-[11px] text-slate-500">Video Editing</p>
+                                    </div>
+                                </div>
+                                <span class="text-lg font-extrabold text-indigo-500">70%</span>
+                            </div>
+                            <div class="w-full bg-slate-100 dark:bg-slate-700 h-2.5 rounded-full overflow-hidden">
+                                <div class="bg-indigo-500 h-full rounded-full transition-all duration-1000" style="width: 70%;"></div>
+                            </div>
+                        </div>
+
+                        <!-- CapCut 60% -->
+                        <div class="p-6 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700/60 shadow-sm space-y-3">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-xl bg-pink-500/10 text-pink-500 flex items-center justify-center text-lg"><i class="fa-solid fa-scissors"></i></div>
+                                    <div>
+                                        <h3 class="font-bold text-slate-900 dark:text-white text-sm">CapCut</h3>
+                                        <p class="text-[11px] text-slate-500">Short-Form Reels</p>
+                                    </div>
+                                </div>
+                                <span class="text-lg font-extrabold text-pink-500">60%</span>
+                            </div>
+                            <div class="w-full bg-slate-100 dark:bg-slate-700 h-2.5 rounded-full overflow-hidden">
+                                <div class="bg-pink-500 h-full rounded-full transition-all duration-1000" style="width: 60%;"></div>
+                            </div>
+                        </div>
+
+                        <!-- Gemini 50% -->
+                        <div class="p-6 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700/60 shadow-sm space-y-3">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center text-lg"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+                                    <div>
+                                        <h3 class="font-bold text-slate-900 dark:text-white text-sm">Gemini AI</h3>
+                                        <p class="text-[11px] text-slate-500">Creative Concepts & Copy</p>
+                                    </div>
+                                </div>
+                                <span class="text-lg font-extrabold text-emerald-500">50%</span>
+                            </div>
+                            <div class="w-full bg-slate-100 dark:bg-slate-700 h-2.5 rounded-full overflow-hidden">
+                                <div class="bg-emerald-500 h-full rounded-full transition-all duration-1000" style="width: 50%;"></div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <!-- Categorized Specialization Domains Section -->
+            <section id="services" class="py-16 px-6 bg-slate-50 dark:bg-slate-900/50 border-y border-slate-200 dark:border-slate-800">
+                <div class="max-w-6xl mx-auto space-y-10">
+                    <div class="text-center max-w-2xl mx-auto">
+                        <h2 class="text-3xl font-bold text-slate-900 dark:text-white">Specialized Media Services</h2>
+                        <div class="w-12 h-1 bg-brand-500 mx-auto rounded-full my-3"></div>
+                        <p class="text-slate-600 dark:text-slate-400">Tailored content creation across my core skills and target industry sectors.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        
+                        <!-- Graphic Design Card -->
+                        <div class="p-6 rounded-3xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700/60 shadow-md space-y-4 relative overflow-hidden">
+                            <div class="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-500 flex items-center justify-center text-2xl font-bold">
+                                <i class="fa-solid fa-palette"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-slate-900 dark:text-white">Graphic Design</h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">High-impact key visuals, banners, posters, and digital branding assets.</p>
+                            <div class="space-y-2 pt-2 border-t border-slate-100 dark:border-slate-700/50">
+                                <div class="flex items-center gap-2 text-xs font-semibold text-slate-700 dark:text-slate-300"><i class="fa-solid fa-building text-amber-500"></i> Real Estate</div>
+                                <div class="flex items-center gap-2 text-xs font-semibold text-slate-700 dark:text-slate-300"><i class="fa-solid fa-calendar-day text-amber-500"></i> Public Holiday</div>
+                                <div class="flex items-center gap-2 text-xs font-semibold text-slate-700 dark:text-slate-300"><i class="fa-solid fa-car text-amber-500"></i> Automotive</div>
+                                <div class="flex items-center gap-2 text-xs font-semibold text-slate-700 dark:text-slate-300"><i class="fa-solid fa-ticket text-amber-500"></i> Event</div>
+                            </div>
+                        </div>
+
+                        <!-- Motion Graphics Card -->
+                        <div class="p-6 rounded-3xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700/60 shadow-md space-y-4 relative overflow-hidden">
+                            <div class="w-12 h-12 rounded-2xl bg-purple-500/10 text-purple-500 flex items-center justify-center text-2xl font-bold">
+                                <i class="fa-solid fa-film"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-slate-900 dark:text-white">Motion Graphics</h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">Animated intros, logo reveals, title sequences, and graphic animations.</p>
+                            <div class="space-y-2 pt-2 border-t border-slate-100 dark:border-slate-700/50">
+                                <div class="flex items-center gap-2 text-xs font-semibold text-slate-700 dark:text-slate-300"><i class="fa-solid fa-building text-purple-500"></i> Real Estate</div>
+                                <div class="flex items-center gap-2 text-xs font-semibold text-slate-700 dark:text-slate-300"><i class="fa-solid fa-calendar-day text-purple-500"></i> Public Holiday</div>
+                                <div class="flex items-center gap-2 text-xs font-semibold text-slate-700 dark:text-slate-300"><i class="fa-solid fa-car text-purple-500"></i> Automotive</div>
+                                <div class="flex items-center gap-2 text-xs font-semibold text-slate-700 dark:text-slate-300"><i class="fa-solid fa-ticket text-purple-500"></i> Event</div>
+                            </div>
+                        </div>
+
+                        <!-- Video Editing Card -->
+                        <div class="p-6 rounded-3xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700/60 shadow-md space-y-4 relative overflow-hidden">
+                            <div class="w-12 h-12 rounded-2xl bg-indigo-500/10 text-indigo-500 flex items-center justify-center text-2xl font-bold">
+                                <i class="fa-solid fa-video"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-slate-900 dark:text-white">Video Editing</h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">Commercial video editing, color grading, social media reels, and event recaps.</p>
+                            <div class="space-y-2 pt-2 border-t border-slate-100 dark:border-slate-700/50">
+                                <div class="flex items-center gap-2 text-xs font-semibold text-slate-700 dark:text-slate-300"><i class="fa-solid fa-building text-indigo-500"></i> Real Estate</div>
+                                <div class="flex items-center gap-2 text-xs font-semibold text-slate-700 dark:text-slate-300"><i class="fa-solid fa-calendar-day text-indigo-500"></i> Public Holiday</div>
+                                <div class="flex items-center gap-2 text-xs font-semibold text-slate-700 dark:text-slate-300"><i class="fa-solid fa-car text-indigo-500"></i> Automotive</div>
+                                <div class="flex items-center gap-2 text-xs font-semibold text-slate-700 dark:text-slate-300"><i class="fa-solid fa-ticket text-indigo-500"></i> Event</div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <!-- Projects Section -->
+            <section id="projects" class="py-16 px-6">
+                <div class="max-w-6xl mx-auto space-y-10">
+                    <div class="text-center max-w-2xl mx-auto">
+                        <h2 class="text-3xl font-bold text-slate-900 dark:text-white">Portfolio Projects</h2>
+                        <div class="w-12 h-1 bg-brand-500 mx-auto rounded-full my-3"></div>
+                        <p class="text-slate-600 dark:text-slate-400">Filter projects by skill set and industry type.</p>
+                    </div>
+
+                    <!-- Filter Buttons -->
+                    <div class="flex flex-wrap items-center justify-center gap-2">
+                        <button onclick="filterProjects('all')" class="filter-btn active px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all bg-brand-600 text-white shadow-sm" data-filter="all">All Work</button>
+                        <button onclick="filterProjects('graphic')" class="filter-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700" data-filter="graphic">Graphic Design</button>
+                        <button onclick="filterProjects('motion')" class="filter-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700" data-filter="motion">Motion Graphics</button>
+                        <button onclick="filterProjects('editing')" class="filter-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700" data-filter="editing">Video Editing</button>
+                    </div>
+
+                    <!-- Projects Grid -->
+                    <div id="projects-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        
+                        <!-- Project 1: Real Estate Graphic -->
+                        <div class="project-card group rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700/60 overflow-hidden shadow-sm hover:shadow-xl transition-all flex flex-col" data-category="graphic">
+                            <div class="relative h-48 overflow-hidden bg-slate-900">
+                                <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=600&q=80" alt="Real Estate Flyer" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                <span class="absolute top-3 right-3 bg-slate-950/80 text-amber-400 text-xs font-bold px-2.5 py-1 rounded-md backdrop-blur-sm">Graphic • Real Estate</span>
+                            </div>
+                            <div class="p-5 flex-grow flex flex-col justify-between space-y-4">
+                                <div>
+                                    <h3 class="text-lg font-bold text-slate-900 dark:text-white">Luxury Condo Launch Graphic</h3>
+                                    <p class="text-xs text-slate-600 dark:text-slate-400 mt-1">High-end real estate poster and digital promotional graphic designed for social media marketing.</p>
+                                </div>
+                                <div class="flex flex-wrap gap-1.5">
+                                    <span class="px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-700 text-[10px] font-medium text-slate-600 dark:text-slate-300">Photoshop (Ps)</span>
+                                    <span class="px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-700 text-[10px] font-medium text-slate-600 dark:text-slate-300">Illustrator (Ai)</span>
+                                </div>
+                                <button onclick="openModal('Luxury Condo Launch Graphic', 'Real Estate promotion visual designed with custom vector layouts and retouched property images for high conversions.', 'Photoshop, Illustrator', 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=800&q=80')" class="w-full py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-semibold hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors text-slate-700 dark:text-slate-200">
+                                    View Details
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Project 2: Automotive Motion -->
+                        <div class="project-card group rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700/60 overflow-hidden shadow-sm hover:shadow-xl transition-all flex flex-col" data-category="motion">
+                            <div class="relative h-48 overflow-hidden bg-slate-900">
+                                <img src="https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&w=600&q=80" alt="Automotive Motion Graphic" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                <span class="absolute top-3 right-3 bg-slate-950/80 text-purple-400 text-xs font-bold px-2.5 py-1 rounded-md backdrop-blur-sm">Motion • Automotive</span>
+                            </div>
+                            <div class="p-5 flex-grow flex flex-col justify-between space-y-4">
+                                <div>
+                                    <h3 class="text-lg font-bold text-slate-900 dark:text-white">Car Showroom Promo Motion</h3>
+                                    <p class="text-xs text-slate-600 dark:text-slate-400 mt-1">Dynamic vehicle typography animation and sleek lower thirds engineered for auto brands.</p>
+                                </div>
+                                <div class="flex flex-wrap gap-1.5">
+                                    <span class="px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-700 text-[10px] font-medium text-slate-600 dark:text-slate-300">After Effects (AE)</span>
+                                </div>
+                                <button onclick="openModal('Car Showroom Promo Motion', 'Motion graphic intro sequence created in After Effects with particle effects and kinetic typography.', 'After Effects', 'https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&w=800&q=80')" class="w-full py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-semibold hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors text-slate-700 dark:text-slate-200">
+                                    View Details
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Project 3: Event Video Editing -->
+                        <div class="project-card group rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700/60 overflow-hidden shadow-sm hover:shadow-xl transition-all flex flex-col" data-category="editing">
+                            <div class="relative h-48 overflow-hidden bg-slate-900">
+                                <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=600&q=80" alt="Event Highlights Edit" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                <span class="absolute top-3 right-3 bg-slate-950/80 text-pink-400 text-xs font-bold px-2.5 py-1 rounded-md backdrop-blur-sm">Editing • Event</span>
+                            </div>
+                            <div class="p-5 flex-grow flex flex-col justify-between space-y-4">
+                                <div>
+                                    <h3 class="text-lg font-bold text-slate-900 dark:text-white">Concert & Festival Highlight Reel</h3>
+                                    <p class="text-xs text-slate-600 dark:text-slate-400 mt-1">High-energy multi-camera event video editing synced precisely to audio beats.</p>
+                                </div>
+                                <div class="flex flex-wrap gap-1.5">
+                                    <span class="px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-700 text-[10px] font-medium text-slate-600 dark:text-slate-300">Premiere Pro (Pr)</span>
+                                    <span class="px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-700 text-[10px] font-medium text-slate-600 dark:text-slate-300">CapCut</span>
+                                </div>
+                                <button onclick="openModal('Concert & Festival Highlight Reel', 'Full event recap edited with Premiere Pro and CapCut including color grading and beat matching.', 'Premiere Pro, CapCut', 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=800&q=80')" class="w-full py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-semibold hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors text-slate-700 dark:text-slate-200">
+                                    View Details
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Project 4: Public Holiday Graphic -->
+                        <div class="project-card group rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700/60 overflow-hidden shadow-sm hover:shadow-xl transition-all flex flex-col" data-category="graphic">
+                            <div class="relative h-48 overflow-hidden bg-slate-900">
+                                <img src="https://images.unsplash.com/photo-1513151233558-d860c5398176?auto=format&fit=crop&w=600&q=80" alt="Public Holiday Greeting Visual" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                <span class="absolute top-3 right-3 bg-slate-950/80 text-amber-400 text-xs font-bold px-2.5 py-1 rounded-md backdrop-blur-sm">Graphic • Public Holiday</span>
+                            </div>
+                            <div class="p-5 flex-grow flex flex-col justify-between space-y-4">
+                                <div>
+                                    <h3 class="text-lg font-bold text-slate-900 dark:text-white">Festive Holiday Wish Poster</h3>
+                                    <p class="text-xs text-slate-600 dark:text-slate-400 mt-1">Cultural celebration graphic designed for corporate social media announcement.</p>
+                                </div>
+                                <div class="flex flex-wrap gap-1.5">
+                                    <span class="px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-700 text-[10px] font-medium text-slate-600 dark:text-slate-300">Photoshop (Ps)</span>
+                                </div>
+                                <button onclick="openModal('Festive Holiday Wish Poster', 'Creative cultural banner with typography and custom lighting effects designed for public holiday campaigns.', 'Photoshop, Gemini AI', 'https://images.unsplash.com/photo-1513151233558-d860c5398176?auto=format&fit=crop&w=800&q=80')" class="w-full py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-semibold hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors text-slate-700 dark:text-slate-200">
+                                    View Details
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <!-- Contact / Let's Work Section with Direct Telegram Link -->
+            <section id="contact" class="py-16 px-6 bg-slate-50 dark:bg-slate-900/50 border-t border-slate-200 dark:border-slate-800">
+                <div class="max-w-3xl mx-auto space-y-8 text-center">
+                    <div>
+                        <h2 class="text-3xl font-extrabold text-slate-900 dark:text-white">Let's Work Together</h2>
+                        <div class="w-12 h-1 bg-brand-500 mx-auto rounded-full my-3"></div>
+                        <p class="text-slate-600 dark:text-slate-400">Have a graphic, motion, or video editing project? Reach out directly via Telegram!</p>
+                    </div>
+
+                    <!-- Direct Telegram Card -->
+                    <div class="p-8 rounded-3xl bg-gradient-to-br from-sky-500/10 via-slate-800/50 to-brand-500/10 border border-sky-500/30 shadow-xl space-y-6">
+                        <div class="w-20 h-20 rounded-full bg-sky-500 text-white flex items-center justify-center text-4xl mx-auto shadow-lg shadow-sky-500/30">
+                            <i class="fa-brands fa-telegram"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-slate-900 dark:text-white">Mao Mengheang</h3>
+                            <p class="text-sky-500 dark:text-sky-400 font-mono text-lg font-bold mt-1">@H3angz</p>
+                        </div>
+
+                        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
+                            <a href="https://t.me/H3angz" target="_blank" class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-sky-500 hover:bg-sky-600 text-white font-bold text-base shadow-lg shadow-sky-500/30 transition-all flex items-center justify-center gap-2">
+                                <i class="fa-brands fa-telegram text-xl"></i>
+                                Open Telegram Chat
+                            </a>
+                            <button onclick="copyTelegram()" class="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-800 dark:text-white font-semibold text-sm transition-all flex items-center justify-center gap-2">
+                                <i class="fa-regular fa-copy"></i>
+                                Copy Username
+                            </button>
+                        </div>
+                        <p id="copy-status" class="text-xs text-emerald-500 font-semibold hidden">Copied @H3angz to clipboard!</p>
+                    </div>
+
+                    <!-- Additional Channels -->
+                    <div class="flex items-center justify-center gap-6 text-slate-500 dark:text-slate-400 pt-4">
+                        <a href="https://www.tiktok.com" target="_blank" class="hover:text-slate-900 dark:hover:text-white transition-colors flex items-center gap-1.5 text-sm font-medium"><i class="fa-brands fa-tiktok"></i> TikTok</a>
+                        <a href="https://www.behance.net" target="_blank" class="hover:text-blue-500 transition-colors flex items-center gap-1.5 text-sm font-medium"><i class="fa-brands fa-behance"></i> Behance</a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Footer -->
+            <footer class="py-8 px-6 border-t border-slate-200 dark:border-slate-800 text-center text-xs text-slate-500 dark:text-slate-400">
+                <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <p>&copy; 2026 Mao Mengheang. All Rights Reserved.</p>
+                    <div class="flex items-center gap-4">
+                        <a href="https://www.tiktok.com" target="_blank" class="hover:text-slate-900 dark:hover:text-white transition-colors">TikTok</a>
+                        <a href="https://www.behance.net" target="_blank" class="hover:text-blue-500 transition-colors">Behance</a>
+                    </div>
+                </div>
+            </footer>
+
+        </div>
+    </div>
+
+    <!-- Project Details Modal -->
+    <div id="project-modal" class="fixed inset-0 z-50 hidden bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 w-full max-w-2xl rounded-3xl overflow-hidden shadow-2xl relative">
+            <button onclick="closeModal()" class="absolute top-4 right-4 z-10 w-8 h-8 rounded-full bg-slate-800/80 text-white flex items-center justify-center hover:bg-slate-700 transition-colors">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="h-64 overflow-hidden relative">
+                <img id="modal-img" src="" alt="Project Preview" class="w-full h-full object-cover">
+            </div>
+            <div class="p-6 space-y-4">
+                <h3 id="modal-title" class="text-2xl font-bold text-slate-900 dark:text-white"></h3>
+                <p id="modal-desc" class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed"></p>
+                <div>
+                    <h4 class="text-xs font-bold uppercase text-slate-400 mb-1">Tools & Software</h4>
+                    <p id="modal-tech" class="text-xs font-mono text-brand-500 font-semibold"></p>
+                </div>
+                <div class="pt-4 flex gap-3">
+                    <button onclick="closeModal()" class="flex-1 py-2.5 rounded-xl bg-brand-600 text-white text-xs font-bold hover:bg-brand-700 transition-colors">Close Showcase</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Application Logic & Interactive Controls -->
+    <script>
+        // Copy Telegram Handle
+        function copyTelegram() {
+            const tempInput = document.createElement('input');
+            tempInput.value = '@H3angz';
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+
+            const status = document.getElementById('copy-status');
+            status.classList.remove('hidden');
+            setTimeout(() => {
+                status.classList.add('hidden');
+            }, 3000);
+        }
+
+        // Device Simulation Switcher Logic
+        function setDeviceView(device) {
+            const frame = document.getElementById('website-frame');
+            const btnDesktop = document.getElementById('btn-desktop');
+            const btnTablet = document.getElementById('btn-tablet');
+            const btnMobile = document.getElementById('btn-mobile');
+            const displayLabel = document.getElementById('viewport-size-display');
+
+            [btnDesktop, btnTablet, btnMobile].forEach(btn => {
+                btn.className = "px-3 py-1.5 rounded-lg flex items-center gap-2 transition-all text-slate-400 hover:text-white font-medium";
+            });
+
+            frame.className = "preview-container bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-screen overflow-hidden flex flex-col relative transition-all";
+
+            if (device === 'desktop') {
+                frame.classList.add('device-desktop');
+                btnDesktop.className = "px-3 py-1.5 rounded-lg flex items-center gap-2 transition-all bg-brand-600 text-white font-medium shadow-sm";
+                displayLabel.textContent = "Full Width";
+            } else if (device === 'tablet') {
+                frame.classList.add('device-tablet');
+                btnTablet.className = "px-3 py-1.5 rounded-lg flex items-center gap-2 transition-all bg-brand-600 text-white font-medium shadow-sm";
+                displayLabel.textContent = "768px (Tablet)";
+            } else if (device === 'mobile') {
+                frame.classList.add('device-mobile');
+                btnMobile.className = "px-3 py-1.5 rounded-lg flex items-center gap-2 transition-all bg-brand-600 text-white font-medium shadow-sm";
+                displayLabel.textContent = "375px (Mobile)";
+            }
+        }
+
+        // Theme Switcher
+        function toggleTheme() {
+            const html = document.documentElement;
+            const themeIcon = document.getElementById('theme-icon');
+
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                themeIcon.className = "fa-solid fa-moon text-slate-700";
+            } else {
+                html.classList.add('dark');
+                themeIcon.className = "fa-solid fa-sun text-yellow-400";
+            }
+        }
+
+        // Mobile Nav Drawer Toggle
+        function toggleMobileNav() {
+            const menu = document.getElementById('mobile-menu');
+            const icon = document.getElementById('mobile-menu-icon');
+            menu.classList.toggle('hidden');
+            
+            if (menu.classList.contains('hidden')) {
+                icon.className = "fa-solid fa-bars text-xl";
+            } else {
+                icon.className = "fa-solid fa-xmark text-xl";
+            }
+        }
+
+        // Filter Projects by Category
+        function filterProjects(category) {
+            const buttons = document.querySelectorAll('.filter-btn');
+            const cards = document.querySelectorAll('.project-card');
+
+            buttons.forEach(btn => {
+                if (btn.getAttribute('data-filter') === category) {
+                    btn.className = "filter-btn active px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all bg-brand-600 text-white shadow-sm";
+                } else {
+                    btn.className = "filter-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700";
+                }
+            });
+
+            cards.forEach(card => {
+                if (category === 'all' || card.getAttribute('data-category') === category) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Modal Logic
+        function openModal(title, desc, tech, image) {
+            document.getElementById('modal-title').textContent = title;
+            document.getElementById('modal-desc').textContent = desc;
+            document.getElementById('modal-tech').textContent = tech;
+            document.getElementById('modal-img').src = image;
+            document.getElementById('project-modal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('project-modal').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
